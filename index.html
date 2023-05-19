@@ -7,12 +7,25 @@
     <link rel="stylesheet" href="styles.css" />
     <title>War</title>
   </head>
-  <body>
+  <body class="overlay">
     <button class="new-deck-btn" id="new-deck-btn">New Deck, Please!</button>
+    <h3 class="remaining-cards-headline" id="remaining-cards-headline"></h3>
+    <h2 id="header" class="header">Game of War</h2>
     <div id="cards" class="card-container">
-      <h2 id="header" class="header">Game of War</h2>
-      <div id="card-one"></div>
-      <div id="card-two"></div>
+      <div>
+        <h3 class="score-headline" id="computer-score-headline"></h3>
+        <div id="card-one" class="card"></div>
+      </div>
+      <div>
+        <div class="card" id="card-two"></div>
+        <h3 class="score-headline" id="player-score-headline"></h3>
+      </div>
+    </div>
+    <div id="modal" class="modal">
+      <div id="modal-content" class="modal-content">
+        <h2 class="modal-result" id="modal-result"></h2>
+        <button class="reset-btn" id="reset-btn">Reset</button>
+      </div>
     </div>
     <button class="draw-cards-btn" id="draw-cards-btn">Draw</button>
     <script src="index.js"></script>

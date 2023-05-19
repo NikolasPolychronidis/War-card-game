@@ -1,17 +1,35 @@
 let deckId;
 const newDeckBtn = document.getElementById('new-deck-btn');
 const drawCardsBtn = document.getElementById('draw-cards-btn');
+const computerScoreHeadline = document.getElementById(
+  'computer-score-headline'
+);
+const playerScoreHeadline = document.getElementById('player-score-headline');
+const modal = document.getElementById('modal');
+const modalResult = document.getElementById('modal-result');
+const resetBtn = document.getElementById('reset-btn');
+
 let cardsArray;
 let card1;
 let card2;
+let remainingCards;
+let computerScore = 0;
+let playerScore = 0;
+
 const header = document.getElementById('header');
 function getNewDeck() {
   fetch('https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/')
     .then(res => res.json())
     .then(data => {
       deckId = data.deck_id;
+      remainingCards = 52;
+      document.getElementById(
+        'remaining-cards-headline'
+      ).innerHTML = `Remaining cards: ${remainingCards}`;
     });
   drawCardsBtn.style.display = 'inline-block';
+  document.getElementById('card-one').innerHTML = '';
+  document.getElementById('card-two').innerHTML = '';
 }
 
 newDeckBtn.addEventListener('click', getNewDeck);
@@ -25,6 +43,13 @@ function drawCards() {
       card2 = cardsArray[1].value;
       getCardsHtml();
       compareCards(card1, card2);
+      remainingCards = data.remaining;
+      document.getElementById(
+        'remaining-cards-headline'
+      ).innerHTML = `Remaining cards: ${remainingCards}`;
+      if (remainingCards === 0) {
+        compareScores();
+      }
     });
 }
 
@@ -56,11 +81,40 @@ function compareCards(card1, card2) {
   ];
   const card1Score = cardValues.indexOf(card1);
   const card2Score = cardValues.indexOf(card2);
-  const result =
-    card1Score > card2Score
-      ? 'Card 1 wins'
-      : card2Score > card1Score
-      ? 'Card 2 wins'
-      : 'WAR!';
-  header.textContent = result;
+  if (card1Score > card2Score) {
+    header.textContent = 'Computer wins round';
+    computerScore += 1;
+  } else if (card2Score > card1Score) {
+    header.textContent = 'Player wins round';
+    playerScore += 1;
+  } else {
+    header.textContent = 'WAR!';
+  }
+
+  playerScoreHeadline.innerHTML = `Player Score: ${playerScore}`;
+  computerScoreHeadline.innerHTML = `Computer Score: ${computerScore}`;
 }
+
+function compareScores() {
+  setTimeout(function () {
+    modal.style.display = 'flex';
+  }, 1500);
+  if (computerScore > playerScore) {
+    modalResult.textContent = `Computer wins with a score of ${computerScore} to ${playerScore}!`;
+  } else if (playerScore > computerScore) {
+    modalResult.textContent = `Player wins with a score of ${playerScore} to ${computerScore}!`;
+  } else {
+    modalResult.textContent = "It's a tie!";
+  }
+}
+
+function resetGame() {
+  modal.style.display = 'none';
+  computerScore = 0;
+  playerScore = 0;
+  playerScoreHeadline.innerHTML = `Player Score: ${playerScore}`;
+  computerScoreHeadline.innerHTML = `Computer Score: ${computerScore}`;
+  getNewDeck();
+}
+
+resetBtn.addEventListener('click', resetGame);
