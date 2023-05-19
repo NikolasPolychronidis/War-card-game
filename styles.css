@@ -2,3 +2,50 @@
   padding: 0;
   margin: 0;
 }
+
+body {
+  background-image: url('table.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+button {
+  background: #fff100;
+  cursor: pointer;
+}
+
+.draw-cards-btn {
+  font-size: 1.2rem;
+  padding: 1em;
+  margin-top: auto; /* Pushes the button to the bottom */
+  display: none;
+}
+
+.new-deck-btn {
+  align-self: flex-start;
+  padding: 0.5rem;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100vh;
+  align-items: center;
+}
+
+.card-container div {
+  height: 200px;
+  width: 143px;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.card-image {
+  max-width: 100%;
+  max-height: 100%;
+}

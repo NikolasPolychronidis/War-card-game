@@ -9,6 +9,7 @@ function getNewDeck() {
     .then(data => {
       deckId = data.deck_id;
     });
+  drawCardsBtn.style.display = 'inline-block';
 }
 
 newDeckBtn.addEventListener('click', getNewDeck);
@@ -25,10 +26,9 @@ function drawCards() {
 drawCardsBtn.addEventListener('click', drawCards);
 
 function getCardsHtml() {
-  const cardsHtml = cardsArray
-    .map(function (card) {
-      return `<img src="${card.image}" alt="${card.value} of ${card.suit}">`;
-    })
-    .join('');
-  document.getElementById('cards').innerHTML = cardsHtml;
+  const cardOneHtml = `<img class="card-image" src="${cardsArray[0].image}" alt="${cardsArray[0].value} of ${cardsArray[0].suit}">`;
+  const cardTwoHtml = `<img class="card-image" src="${cardsArray[1].image}" alt="${cardsArray[1].value} of ${cardsArray[1].suit}">`;
+
+  document.getElementById('card-one').innerHTML = cardOneHtml;
+  document.getElementById('card-two').innerHTML = cardTwoHtml;
 }
