@@ -17,40 +17,44 @@ let computerScore = 0;
 let playerScore = 0;
 
 const header = document.getElementById('header');
-function getNewDeck() {
-  fetch('https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/')
-    .then(res => res.json())
-    .then(data => {
-      deckId = data.deck_id;
-      remainingCards = 52;
-      document.getElementById(
-        'remaining-cards-headline'
-      ).innerHTML = `Remaining cards: ${remainingCards}`;
-    });
+
+async function getNewDeck() {
+  const response = await fetch(
+    'https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/'
+  );
+  const data = await response.json();
+  deckId = data.deck_id;
+  remainingCards = data.remaining;
+  document.getElementById(
+    'remaining-cards-headline'
+  ).innerHTML = `Remaining cards: ${remainingCards}`;
+
   drawCardsBtn.style.display = 'inline-block';
   document.getElementById('card-one').innerHTML = '';
   document.getElementById('card-two').innerHTML = '';
+  newDeckBtn.style.display = 'none';
 }
 
 newDeckBtn.addEventListener('click', getNewDeck);
 
-function drawCards() {
-  fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
-    .then(res => res.json())
-    .then(data => {
-      cardsArray = data.cards;
-      card1 = cardsArray[0].value;
-      card2 = cardsArray[1].value;
-      getCardsHtml();
-      compareCards(card1, card2);
-      remainingCards = data.remaining;
-      document.getElementById(
-        'remaining-cards-headline'
-      ).innerHTML = `Remaining cards: ${remainingCards}`;
-      if (remainingCards === 0) {
-        compareScores();
-      }
-    });
+async function drawCards() {
+  const response = await fetch(
+    `https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`
+  );
+  const data = await response.json();
+  cardsArray = data.cards;
+  card1 = cardsArray[0].value;
+  card2 = cardsArray[1].value;
+  getCardsHtml();
+  compareCards(card1, card2);
+  remainingCards = data.remaining;
+  document.getElementById(
+    'remaining-cards-headline'
+  ).innerHTML = `Remaining cards: ${remainingCards}`;
+  if (remainingCards === 0) {
+    drawCardsBtn.style.display = 'none';
+    compareScores();
+  }
 }
 
 drawCardsBtn.addEventListener('click', drawCards);
@@ -98,7 +102,7 @@ function compareCards(card1, card2) {
 function compareScores() {
   setTimeout(function () {
     modal.style.display = 'flex';
-  }, 1500);
+  }, 1000);
   if (computerScore > playerScore) {
     modalResult.textContent = `Computer wins with a score of ${computerScore} to ${playerScore}!`;
   } else if (playerScore > computerScore) {
